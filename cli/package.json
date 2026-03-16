@@ -1,0 +1,23 @@
+{
+  "name": "@needtools/need",
+  "version": "0.1.0",
+  "description": "Discover the right CLI tool for any task using plain English",
+  "type": "module",
+  "bin": {
+    "need": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "commander": "^13.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0",
+    "@types/node": "^22.0.0"
+  }
+}
