@@ -7,10 +7,10 @@ Semantic search across 6,000+ CLI tools. Works standalone or as an MCP server fo
 ## Install
 
 ```bash
-npm install -g @needtools/need
+npm install -g @agentneeds/need
 ```
 
-Or run directly: `npx @needtools/need "compress png images"`
+Or run directly: `npx @agentneeds/need "compress png images"`
 
 ## Commands
 
@@ -72,7 +72,7 @@ No API keys required. No accounts. Just install and search.
 
 - [GitHub](https://github.com/tuckerschreiber/need)
 - [Website](https://agentneed.dev)
-- [npm](https://www.npmjs.com/package/@needtools/need)
+- [npm](https://www.npmjs.com/package/@agentneeds/need)
 
 ## License
 

@@ -8,7 +8,7 @@ vi.mock('node:os');
 const mockedFs = vi.mocked(fs);
 const mockedOs = vi.mocked(os);
 
-const EXPECTED_CONFIG = { command: 'npx', args: ['@needtools/need', 'serve'] };
+const EXPECTED_CONFIG = { command: 'npx', args: ['@agentneeds/need', 'serve'] };
 
 describe('setupCommand', () => {
   let logSpy: ReturnType<typeof vi.spyOn>;

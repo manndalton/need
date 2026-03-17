@@ -1,5 +1,5 @@
 {
-  "name": "@needtools/need",
+  "name": "@agentneeds/need",
   "version": "0.1.0",
   "description": "Discover the right CLI tool for any task using plain English",
   "type": "module",

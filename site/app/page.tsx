@@ -1,264 +1,278 @@
-import {
-  BrainCircuitIcon,
-  GithubIcon,
-  SearchIcon,
-  ShieldCheckIcon,
-  ZapIcon,
-} from "lucide-react";
+import { ArrowUpRightIcon, GithubIcon } from "lucide-react";
+import Link from "next/link";
 
 import NeedLogo from "../components/logos/need";
-import FAQ from "../components/sections/faq/default";
-import Footer from "../components/sections/footer/default";
-import Items from "../components/sections/items/default";
-import Navbar from "../components/sections/navbar/default";
 import { SearchBar } from "../components/ui/search-bar";
-import { DotPattern } from "../components/ui/dot-pattern";
 import { InstallCommand } from "../components/ui/install-command";
-import { LayoutLines } from "../components/ui/layout-lines";
-import { Section } from "../components/ui/section";
-import { Terminal } from "../components/ui/terminal";
 
 export default function Home() {
   return (
-    <main className="bg-background text-foreground min-h-screen w-full">
-      <LayoutLines />
-
-      {/* Navbar */}
-      <Navbar
-        name=""
-        logo={<NeedLogo />}
-        showNavigation={true}
-        mobileLinks={[]}
-        customNavigation={<SearchBar compact />}
-        actions={[
-          {
-            text: "GitHub",
-            href: "https://github.com/tuckerschreiber/need",
-            isButton: true,
-            variant: "ghost",
-            icon: <GithubIcon className="mr-2 size-4" />,
-          },
-        ]}
-      />
-
-      {/* Hero */}
-      <Section className="relative overflow-hidden">
-        <DotPattern className="fade-bottom" />
-        <div className="relative mx-auto max-w-[760px] flex flex-col pt-2 sm:pt-6">
-          <div className="flex flex-col items-center gap-6 text-center">
-            <p className="animate-appear text-muted-foreground text-xs tracking-wide font-medium">
-              Open Source  ·  No API Keys  ·  MCP Native  ·  Any Agent
-            </p>
-            <h1 className="animate-appear from-foreground to-foreground dark:to-muted-foreground relative z-10 inline-block bg-linear-to-r bg-clip-text text-4xl leading-tight font-semibold text-balance text-transparent sm:text-6xl sm:leading-tight">
-              Find the right CLI tool in plain English
-            </h1>
-            <p className="animate-appear text-muted-foreground relative z-10 max-w-[540px] text-base font-medium text-balance opacity-0 delay-100">
-              Describe what you need, get ranked results from thousands of tools, and install in one command. Works standalone or as an MCP server for AI agents.
-            </p>
-            <div className="flex flex-col items-center gap-3">
-              <InstallCommand command={`npx @needtools/need "compress png images"`} />
-              <a
-                href="https://github.com/tuckerschreiber/need"
-                className="text-muted-foreground hover:text-foreground animate-appear inline-flex items-center gap-1.5 text-sm opacity-0 delay-500 transition-colors"
-              >
-                <GithubIcon className="size-3.5" />
-                View source on GitHub
-              </a>
-            </div>
+    <main className="min-h-screen bg-[#0a0a0a] font-mono text-[#e8e8e8]">
+      {/* Header */}
+      <header className="border-b border-[#27272a]">
+        <div className="mx-auto flex max-w-[1100px] items-center justify-between px-4 py-3">
+          <Link href="/" className="transition-opacity hover:opacity-80">
+            <NeedLogo />
+          </Link>
+          <div className="flex-1 px-6">
+            <SearchBar compact />
           </div>
-          <div className="animate-appear relative z-10 mx-auto mt-10 w-full max-w-[600px] opacity-0 delay-500">
-            <Terminal title="~">
-              <span className="text-muted-foreground">$</span>{" "}
-              <span className="text-foreground">need compress png images without losing quality</span>
-              {"\n\n"}
-              <span className="text-muted-foreground">{"  "}1.</span>{" "}
-              <span className="text-foreground">pngquant</span>
-              {"       "}
-              <span className="text-muted-foreground">brew install pngquant</span>
-              {"     "}
-              <span className="text-brand">92%</span>
-              {"\n"}
-              <span className="text-muted-foreground">{"  "}2.</span>{" "}
-              <span className="text-foreground">optipng</span>
-              {"        "}
-              <span className="text-muted-foreground">brew install optipng</span>
-              {"       "}
-              <span className="text-brand">87%</span>
-              {"\n"}
-              <span className="text-muted-foreground">{"  "}3.</span>{" "}
-              <span className="text-foreground">imagemagick</span>
-              {"    "}
-              <span className="text-muted-foreground">brew install imagemagick</span>
-              {"   "}
-              <span className="text-brand">94%</span>
-            </Terminal>
+          <a
+            href="https://github.com/tuckerschreiber/need"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-xs text-[#a1a1aa] transition-colors hover:text-[#e8e8e8]"
+          >
+            <GithubIcon className="size-4" />
+          </a>
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-[1100px] px-4 pt-16 pb-8">
+
+        {/* Hero card */}
+        <div>
+          <div className="shadow-[0_0_0_1.5px_#27272a,0_1px_2px_rgba(0,0,0,0.05)]">
+            {/* Tagline */}
+            <div className="px-8 py-16 text-center">
+              <h1 className="text-sm uppercase tracking-[0.05em]">
+                Tool discovery for AI agents
+              </h1>
+              <p className="mx-auto mt-4 max-w-md text-xs leading-relaxed text-[#a1a1aa]">
+                Describe what you need in plain English. Get results ranked by what actually worked for other agents.
+              </p>
+            </div>
+
+            {/* Feature grid */}
+            <div className="grid grid-cols-2 border-t border-[#27272a] sm:grid-cols-4">
+              <div className="border-r border-b border-[#27272a] px-4 py-5 text-center">
+                <span className="text-xs uppercase tracking-[0.05em]">Open Source</span>
+              </div>
+              <div className="border-b border-[#27272a] sm:border-r px-4 py-5 text-center">
+                <span className="text-xs uppercase tracking-[0.05em]">No API Keys</span>
+              </div>
+              <div className="border-r border-b border-[#27272a] px-4 py-5 text-center">
+                <span className="text-xs uppercase tracking-[0.05em]">Zero Config</span>
+              </div>
+              <div className="border-b border-[#27272a] px-4 py-5 text-center">
+                <span className="text-xs uppercase tracking-[0.05em]">MCP Ready</span>
+              </div>
+            </div>
+
+            {/* Install command */}
+            <div className="flex items-center justify-between border-b border-[#27272a] px-8 py-5">
+              <span className="text-xs uppercase tracking-[0.05em] text-[#a1a1aa]">Get Started</span>
+              <InstallCommand command={`npx @agentneeds/need "convert pdf to png"`} />
+            </div>
+
+            {/* GitHub link */}
+            <a
+              href="https://github.com/tuckerschreiber/need"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center justify-between border-b border-[#27272a] px-8 py-4 transition-colors hover:bg-[#18181b]"
+            >
+              <span className="text-xs uppercase tracking-[0.05em] text-[#a1a1aa]">GitHub</span>
+              <span className="flex items-center gap-2 text-xs text-[#a1a1aa] transition-colors group-hover:text-[#e8e8e8]">
+                github.com/tuckerschreiber/need
+                <ArrowUpRightIcon className="size-3" />
+              </span>
+            </a>
+
+            {/* npm link */}
+            <a
+              href="https://www.npmjs.com/package/@agentneeds/need"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center justify-between px-8 py-4 transition-colors hover:bg-[#18181b]"
+            >
+              <span className="text-xs uppercase tracking-[0.05em] text-[#a1a1aa]">npm</span>
+              <span className="flex items-center gap-2 text-xs text-[#a1a1aa] transition-colors group-hover:text-[#e8e8e8]">
+                @agentneeds/need
+                <ArrowUpRightIcon className="size-3" />
+              </span>
+            </a>
           </div>
         </div>
-      </Section>
 
-      {/* Two commands and you're in */}
-      <Section>
-        <div className="mx-auto max-w-[600px] flex flex-col items-center gap-10">
-          <div className="flex flex-col items-center gap-3 text-center">
-            <h2 className="text-2xl font-semibold sm:text-4xl">
-              Two commands and you&apos;re in
-            </h2>
+        {/* Demo section */}
+        <div className="mt-8">
+          <div className="mb-6">
+            <h2 className="text-xs uppercase tracking-[0.05em] text-[#a1a1aa]">Demo</h2>
           </div>
-          <div className="grid w-full gap-8">
-            <div className="flex flex-col gap-3">
-              <span className="text-brand text-sm font-semibold">1. Try it</span>
-              <Terminal title="~">
-                <span className="text-muted-foreground">$</span>{" "}
-                <span className="text-foreground">npx @needtools/need &quot;convert video to gif&quot;</span>
-                {"\n\n"}
-                <span className="text-muted-foreground">{"  "}1.</span>{" "}
-                <span className="text-foreground">ffmpeg</span>
-                {"         "}
-                <span className="text-muted-foreground">brew install ffmpeg</span>
-                {"        "}
-                <span className="text-brand">95%</span>
-                {"\n"}
-                <span className="text-muted-foreground">{"  "}2.</span>{" "}
-                <span className="text-foreground">gifski</span>
-                {"         "}
-                <span className="text-muted-foreground">brew install gifski</span>
-                {"        "}
-                <span className="text-brand">89%</span>
-              </Terminal>
+          <div className="shadow-[0_0_0_1.5px_#27272a,0_1px_2px_rgba(0,0,0,0.05)]">
+            {/* Terminal header */}
+            <div className="flex items-center gap-2 border-b border-[#27272a] bg-[#18181b] px-4 py-2">
+              <span className="text-[0.6875rem] text-[#a1a1aa]">terminal</span>
             </div>
-            <div className="flex flex-col gap-3">
-              <span className="text-brand text-sm font-semibold">2. Add to your AI agent</span>
-              <Terminal title="~">
-                <span className="text-muted-foreground">$</span>{" "}
-                <span className="text-foreground">npx @needtools/need setup</span>
-                {"\n"}
-                {"  "}
-                <span className="text-brand">✓</span> Claude Code — configured
-                {"\n"}
-                {"  "}
-                <span className="text-brand">✓</span> Cursor — configured
-                {"\n\n"}
-                {"  "}
-                <span className="text-muted-foreground">Your agent can now search, install, and report tools via MCP.</span>
-              </Terminal>
+            {/* Terminal content */}
+            <div className="bg-[#09090b] p-6 text-xs leading-7">
+              <div>
+                <span className="text-[#71717a]">$</span>{" "}
+                <span className="text-[#e8e8e8]">need &quot;convert pdf to png&quot;</span>
+              </div>
+              <div className="mt-4">
+                <div>
+                  <span className="text-[#71717a]">{"  "}1.</span>{" "}
+                  <span className="text-[#c8e64a]">poppler</span>
+                  {"      "}
+                  <span className="text-[#c8e64a]">96%</span>
+                  <span className="text-[#71717a]">{" · "}4.1k uses</span>
+                </div>
+                <div className="text-[#71717a]">{"     "}brew install poppler</div>
+                <div className="mt-2">
+                  <span className="text-[#71717a]">{"  "}2.</span>{" "}
+                  <span className="text-[#c8e64a]">imagemagick</span>
+                  {"  "}
+                  <span className="text-[#c8e64a]">89%</span>
+                  <span className="text-[#71717a]">{" · "}2.8k uses</span>
+                </div>
+                <div className="text-[#71717a]">{"     "}brew install imagemagick</div>
+                <div className="mt-2">
+                  <span className="text-[#71717a]">{"  "}3.</span>{" "}
+                  <span className="text-[#c8e64a]">ghostscript</span>
+                  {"  "}
+                  <span className="text-[#c8e64a]">82%</span>
+                  <span className="text-[#71717a]">{" · "}900 uses</span>
+                </div>
+                <div className="text-[#71717a]">{"     "}brew install ghostscript</div>
+              </div>
             </div>
           </div>
         </div>
-      </Section>
 
-      {/* Features */}
-      <Items
-        title="Everything you need. Nothing you don't."
-        items={[
-          {
-            title: "Semantic search",
-            description: "Describe what you need in plain English. No exact package names required.",
-            icon: <SearchIcon className="size-5 stroke-1" />,
-          },
-          {
-            title: "MCP native",
-            description: "Built as a Model Context Protocol server from day one.",
-            icon: <BrainCircuitIcon className="size-5 stroke-1" />,
-          },
-          {
-            title: "Security allowlist",
-            description: "install_tool only runs safe package manager commands. No arbitrary code execution.",
-            icon: <ShieldCheckIcon className="size-5 stroke-1" />,
-          },
-          {
-            title: "Zero config",
-            description: "No API keys, no accounts, no setup. Just npx and go.",
-            icon: <ZapIcon className="size-5 stroke-1" />,
-          },
-        ]}
-      />
+        {/* How it works section */}
+        <div className="mt-8">
+          <div className="mb-6">
+            <h2 className="text-xs uppercase tracking-[0.05em] text-[#a1a1aa]">How It Works</h2>
+          </div>
+          <div className="shadow-[0_0_0_1.5px_#27272a,0_1px_2px_rgba(0,0,0,0.05)]">
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              {/* CLI panel */}
+              <div className="border-b border-[#27272a] lg:border-b-0 lg:border-r">
+                <div className="border-b border-[#27272a] bg-[#18181b] px-4 py-2">
+                  <span className="text-[0.6875rem] text-[#a1a1aa]">1. search</span>
+                </div>
+                <div className="bg-[#09090b] p-6 text-xs leading-7">
+                  <div>
+                    <span className="text-[#71717a]">$</span>{" "}
+                    <span className="text-[#e8e8e8]">need &quot;compress png images&quot;</span>
+                  </div>
+                  <div className="mt-4">
+                    <div>
+                      <span className="text-[#71717a]">{"  "}1.</span>{" "}
+                      <span className="text-[#c8e64a]">pngquant</span>
+                      {"    "}
+                      <span className="text-[#c8e64a]">92%</span>
+                      <span className="text-[#71717a]">{" · "}3.2k uses</span>
+                    </div>
+                    <div className="text-[#71717a]">{"     "}brew install pngquant</div>
+                    <div className="mt-2">
+                      <span className="text-[#71717a]">{"  "}2.</span>{" "}
+                      <span className="text-[#c8e64a]">optipng</span>
+                      {"     "}
+                      <span className="text-[#c8e64a]">87%</span>
+                      <span className="text-[#71717a]">{" · "}1.8k uses</span>
+                    </div>
+                    <div className="text-[#71717a]">{"     "}brew install optipng</div>
+                  </div>
+                </div>
+              </div>
+              {/* MCP panel */}
+              <div>
+                <div className="border-b border-[#27272a] bg-[#18181b] px-4 py-2">
+                  <span className="text-[0.6875rem] text-[#a1a1aa]">2. connect your agent</span>
+                </div>
+                <div className="bg-[#09090b] p-6 text-xs leading-7">
+                  <div className="text-[#71717a]">{"{"}</div>
+                  <div>
+                    {"  "}<span className="text-[#71717a]">&quot;mcpServers&quot;:</span>{" "}{"{"}
+                  </div>
+                  <div>
+                    {"    "}<span className="text-[#71717a]">&quot;need&quot;:</span>{" "}{"{"}
+                  </div>
+                  <div>
+                    {"      "}<span className="text-[#71717a]">&quot;command&quot;:</span>{" "}<span className="text-[#60a5fa]">&quot;npx&quot;</span>,
+                  </div>
+                  <div>
+                    {"      "}<span className="text-[#71717a]">&quot;args&quot;:</span>{" "}[<span className="text-[#60a5fa]">&quot;@agentneeds/need&quot;</span>, <span className="text-[#60a5fa]">&quot;serve&quot;</span>]
+                  </div>
+                  <div>{"    "}{"}"}</div>
+                  <div>{"  "}{"}"}</div>
+                  <div className="text-[#71717a]">{"}"}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      {/* FAQ */}
-      <FAQ
-        title="Questions & Answers"
-        items={[
-          {
-            question: "Can't I just Google this?",
-            answer: (
-              <p className="text-muted-foreground max-w-[600px]">
-                You can. You&apos;ll get a Stack Overflow answer from 2019, three Medium articles behind
-                paywalls, and a GitHub repo with 2 stars last updated in 2021. need gives you ranked,
-                current results with install commands and success rates.
-              </p>
-            ),
-          },
-          {
-            question: "Can't AI agents just know which tools exist?",
-            answer: (
-              <p className="text-muted-foreground max-w-[600px]">
-                They can&apos;t. LLMs have a training cutoff and frequently hallucinate package names.
-                need gives them a real-time, verified index to search against.
-              </p>
-            ),
-          },
-          {
-            question: "What if I don't use AI agents?",
-            answer: (
-              <p className="text-muted-foreground max-w-[600px]">
-                need works great as a standalone CLI. Think of it as tldr meets brew search with
-                semantic understanding. The MCP integration is a bonus, not a requirement.
-              </p>
-            ),
-          },
-          {
-            question: "How is this different from package manager search?",
-            answer: (
-              <p className="text-muted-foreground max-w-[600px]">
-                brew search and apt search match keywords. need understands intent. Search &quot;make
-                images smaller&quot; and you&apos;ll get pngquant, optipng, and jpegoptim — not just
-                packages with &quot;image&quot; in the name.
-              </p>
-            ),
-          },
-          {
-            question: "Is it safe to let AI agents install things?",
-            answer: (
-              <p className="text-muted-foreground max-w-[600px]">
-                The MCP install_tool only allows commands from a strict allowlist: brew install, apt
-                install, npm install -g, pip install, cargo install. Shell metacharacters are rejected.
-                No arbitrary code execution.
-              </p>
-            ),
-          },
-        ]}
-      />
+        {/* FAQ section */}
+        <div className="mt-8">
+          <div className="mb-6">
+            <h2 className="text-xs uppercase tracking-[0.05em] text-[#a1a1aa]">FAQ</h2>
+          </div>
+          <div className="shadow-[0_0_0_1.5px_#27272a,0_1px_2px_rgba(0,0,0,0.05)]">
+            <FaqItem
+              question="Can't I just Google this?"
+              answer="You can. You'll get a Stack Overflow answer from 2019, three Medium articles behind paywalls, and a GitHub repo with 2 stars last updated in 2021. need gives you ranked, current results with install commands and success rates."
+            />
+            <FaqItem
+              question="Can't AI agents just know which tools exist?"
+              answer="They can't. LLMs have a training cutoff and frequently hallucinate package names. need gives them a real-time, verified index to search against."
+            />
+            <FaqItem
+              question="What if I don't use AI agents?"
+              answer="need works great as a standalone CLI. Think of it as tldr meets brew search with semantic understanding. The MCP integration is a bonus, not a requirement."
+            />
+            <FaqItem
+              question="How is this different from package manager search?"
+              answer={`brew search and apt search match keywords. need understands intent. Search "make images smaller" and you'll get pngquant, optipng, and jpegoptim — not just packages with "image" in the name.`}
+            />
+            <FaqItem
+              question="Is it safe to let AI agents install things?"
+              answer="The MCP install_tool only allows commands from a strict allowlist: brew install, apt install, npm install -g, pip install, cargo install. Shell metacharacters are rejected. No arbitrary code execution."
+              last
+            />
+          </div>
+        </div>
 
-      {/* CTA */}
-      <Section>
-        <div className="mx-auto max-w-[520px] flex flex-col items-center gap-5 text-center">
-          <h2 className="text-2xl font-semibold sm:text-4xl">
-            Try it now
-          </h2>
-          <InstallCommand command={`npx @needtools/need "convert pdf to png"`} />
-          <p className="text-muted-foreground text-sm">
-            Then run <code className="font-mono">need setup</code> to connect your AI agent.
-          </p>
-          <div className="mt-2 flex items-center gap-6">
-            <a href="https://github.com/tuckerschreiber/need" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+        {/* Footer */}
+        <footer className="mt-16 flex items-center justify-between py-8 text-xs text-[#71717a]">
+          <span>© 2026 Tucker Schreiber</span>
+          <div className="flex items-center gap-6">
+            <a
+              href="https://github.com/tuckerschreiber/need"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors hover:text-[#e8e8e8]"
+            >
               GitHub
             </a>
-            <a href="https://www.npmjs.com/package/@needtools/need" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+            <a
+              href="https://www.npmjs.com/package/@agentneeds/need"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors hover:text-[#e8e8e8]"
+            >
               npm
             </a>
-            <span className="text-muted-foreground text-sm">MIT License</span>
           </div>
-        </div>
-      </Section>
-
-      {/* Footer */}
-      <Footer
-        logo={<NeedLogo />}
-        name=""
-        columns={[]}
-        copyright="© 2026 Tucker Schreiber"
-        policies={[]}
-        showModeToggle={false}
-      />
+        </footer>
+      </div>
     </main>
+  );
+}
+
+function FaqItem({ question, answer, last }: { question: string; answer: string; last?: boolean }) {
+  return (
+    <details className={`group ${last ? "" : "border-b border-[#27272a]"}`}>
+      <summary className="flex cursor-pointer list-none items-center justify-between px-7 py-5 text-xs transition-colors hover:bg-[#18181b] [&::-webkit-details-marker]:hidden">
+        <span>{question}</span>
+        <span className="text-[#71717a] transition-transform group-open:rotate-45">+</span>
+      </summary>
+      <div className="px-7 pb-5 text-xs leading-relaxed text-[#a1a1aa]">
+        {answer}
+      </div>
+    </details>
   );
 }

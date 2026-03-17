@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as os from 'node:os';
 
-const MCP_CONFIG = { command: 'npx', args: ['@needtools/need', 'serve'] };
+const MCP_CONFIG = { command: 'npx', args: ['@agentneeds/need', 'serve'] };
 
 interface McpConfig {
   mcpServers?: Record<string, unknown>;

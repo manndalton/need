@@ -5,7 +5,7 @@
 AI agents hallucinate package names. Developers waste time Googling. `need` fixes both — semantic search across 6,000+ CLI tools, with an MCP server so AI agents can discover and install tools autonomously.
 
 ```bash
-npx @needtools/need "compress png images"
+npx @agentneeds/need "compress png images"
 ```
 
 ```
@@ -17,10 +17,10 @@ npx @needtools/need "compress png images"
 ## Install
 
 ```bash
-npm install -g @needtools/need
+npm install -g @agentneeds/need
 ```
 
-Or use directly with `npx @needtools/need`.
+Or use directly with `npx @agentneeds/need`.
 
 ## Usage
 
@@ -86,7 +86,7 @@ Explore all 6,000+ indexed tools at [agentneed.dev](https://agentneed.dev).
 
 | Package | Description |
 |---------|-------------|
-| [`cli/`](./cli) | The `need` CLI and MCP server ([npm](https://www.npmjs.com/package/@needtools/need)) |
+| [`cli/`](./cli) | The `need` CLI and MCP server ([npm](https://www.npmjs.com/package/@agentneeds/need)) |
 | [`api/`](./api) | Search API — Cloudflare Workers + Neon Postgres + pgvector |
 | [`site/`](./site) | Marketing site and tool directory ([agentneed.dev](https://agentneed.dev)) |
 

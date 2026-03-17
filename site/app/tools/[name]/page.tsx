@@ -14,7 +14,6 @@ export default async function ToolPage({
   const tool = await getToolByName(decodeURIComponent(name));
   if (!tool) notFound();
 
-  // Fetch related tools from same category
   const related = tool.category
     ? await listTools({ category: tool.category, limit: 6 }).then((r) =>
         r.tools.filter((t) => t.id !== tool.id).slice(0, 5)
@@ -25,28 +24,28 @@ export default async function ToolPage({
     <div className="mx-auto max-w-3xl px-4 py-16">
       {/* Top */}
       <div className="flex flex-col gap-4">
-        <h1 className="font-mono text-2xl font-bold sm:text-3xl">{tool.name}</h1>
+        <h1 className="font-mono text-xl">{tool.name}</h1>
         {tool.short_description && (
-          <p className="text-muted-foreground/80 text-lg">{tool.short_description}</p>
+          <p className="text-sm text-[#a1a1aa]">{tool.short_description}</p>
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <span className="text-muted-foreground text-sm">{tool.package_manager}</span>
+          <span className="text-xs text-[#71717a]">{tool.package_manager}</span>
           {tool.platform?.map((p) => (
-            <span key={p} className="text-muted-foreground/60 text-sm">{p}</span>
+            <span key={p} className="text-xs text-[#71717a]">{p}</span>
           ))}
           {tool.category && (
             <Link
               href={`/tools/category/${encodeURIComponent(tool.category)}`}
-              className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+              className="text-xs text-[#60a5fa] transition-colors hover:text-[#93bbfc]"
             >
               {tool.category}
             </Link>
           )}
         </div>
-        <div className="mt-2 flex flex-col gap-2">
-          <p className="text-muted-foreground/50 text-xs">Try with need</p>
-          <InstallCommand command={`npx @needtools/need ${tool.name}`} />
-          <p className="text-muted-foreground/50 mt-2 text-xs">Or install directly</p>
+        <div className="mt-2 flex flex-col gap-3">
+          <span className="text-xs uppercase tracking-[0.05em] text-[#71717a]">Try with need</span>
+          <InstallCommand command={`npx @agentneeds/need ${tool.name}`} />
+          <span className="text-xs uppercase tracking-[0.05em] text-[#71717a]">Or install directly</span>
           <InstallCommand command={tool.install_command} />
         </div>
         {tool.source_url && (
@@ -54,7 +53,7 @@ export default async function ToolPage({
             href={tool.source_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-muted-foreground/60 hover:text-muted-foreground inline-flex items-center gap-1 text-sm transition-colors"
+            className="inline-flex items-center gap-1 text-xs text-[#60a5fa] transition-colors hover:text-[#93bbfc]"
           >
             Source <ExternalLinkIcon className="size-3" />
           </a>
@@ -64,16 +63,16 @@ export default async function ToolPage({
       {/* Middle */}
       <div className="mt-12 flex flex-col gap-10">
         <div>
-          <h2 className="text-muted-foreground/60 mb-3 text-xs font-medium uppercase tracking-wider">About</h2>
-          <p className="text-muted-foreground leading-relaxed">{tool.description}</p>
+          <h2 className="mb-3 text-xs uppercase tracking-[0.05em] text-[#71717a]">About</h2>
+          <p className="text-sm leading-relaxed text-[#a1a1aa]">{tool.description}</p>
         </div>
 
         {tool.binaries && tool.binaries.length > 0 && (
           <div>
-            <h2 className="text-muted-foreground/60 mb-3 text-xs font-medium uppercase tracking-wider">Commands</h2>
+            <h2 className="mb-3 text-xs uppercase tracking-[0.05em] text-[#71717a]">Commands</h2>
             <div className="flex flex-wrap gap-2">
               {tool.binaries.map((bin) => (
-                <code key={bin} className="bg-muted/30 rounded-md px-2.5 py-1 font-mono text-sm">{bin}</code>
+                <code key={bin} className="border border-[#27272a] bg-[#09090b] px-2.5 py-1 font-mono text-sm text-[#e8e8e8]">{bin}</code>
               ))}
             </div>
           </div>
@@ -81,13 +80,13 @@ export default async function ToolPage({
 
         {tool.usage_examples && tool.usage_examples.length > 0 && (
           <div>
-            <h2 className="text-muted-foreground/60 mb-3 text-xs font-medium uppercase tracking-wider">Examples</h2>
-            <div className="flex flex-col gap-4">
+            <h2 className="mb-3 text-xs uppercase tracking-[0.05em] text-[#71717a]">Examples</h2>
+            <div className="shadow-[0_0_0_1.5px_#27272a,0_1px_2px_rgba(0,0,0,0.05)]">
               {tool.usage_examples.map((example, i) => (
-                <div key={i} className="flex flex-col gap-1.5">
-                  <span className="text-muted-foreground/80 text-sm">{example.description}</span>
-                  <code className="bg-muted/30 rounded-lg px-4 py-3 font-mono text-sm">
-                    <span className="text-muted-foreground/50">$ </span>{example.command}
+                <div key={i} className={`flex flex-col gap-1.5 px-5 py-4 ${i < tool.usage_examples!.length - 1 ? "border-b border-[#27272a]" : ""}`}>
+                  <span className="text-xs text-[#a1a1aa]">{example.description}</span>
+                  <code className="font-mono text-sm text-[#e8e8e8]">
+                    <span className="text-[#71717a]">$ </span>{example.command}
                   </code>
                 </div>
               ))}
@@ -99,15 +98,14 @@ export default async function ToolPage({
       {/* Bottom */}
       {related.length > 0 && (
         <div className="mt-16">
-          <h2 className="text-muted-foreground/60 mb-4 text-xs font-medium uppercase tracking-wider">Related Tools</h2>
-          <div className="grid gap-2 sm:grid-cols-2">
+          <h2 className="mb-4 text-xs uppercase tracking-[0.05em] text-[#71717a]">Related Tools</h2>
+          <div className="shadow-[0_0_0_1.5px_#27272a,0_1px_2px_rgba(0,0,0,0.05)]">
             {related.map((t) => (
               <ToolCard key={t.id} tool={t} />
             ))}
           </div>
         </div>
       )}
-
     </div>
   );
 }
