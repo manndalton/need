@@ -2,18 +2,25 @@
   <img src="assets/logo.svg" alt="need" width="400" />
 </p>
 
-<p align="center">Find the right CLI tool in plain English.</p>
+<p align="center">Tool discovery for AI agents.</p>
 
-AI agents hallucinate package names. Developers waste time Googling. `need` fixes both — semantic search across 10,000+ CLI tools, with an MCP server so AI agents can discover and install tools autonomously.
+AI agents hallucinate package names. `need` gives them a verified index of 10,000+ CLI tools — and a closed feedback loop that gets smarter with every install.
 
-```bash
-npx @agentneeds/need "compress png images"
+## What happens
+
+You ask Claude to "compress these PNGs". Claude doesn't have `pngquant` installed and doesn't know what the best tool is. But `need` is running as an MCP server in the background, so Claude automatically:
+
+1. **Searches** need for "compress png images"
+2. **Installs** the top result (`brew install pngquant`)
+3. **Runs** it on your files
+4. **Reports** that it worked — so the next agent's search ranks `pngquant` higher
+
+You never interact with `need` directly. You just see the result.
+
 ```
-
-```
-  1. pngquant         brew install pngquant       92% success
-  2. optipng          brew install optipng         87% success
-  3. imagemagick      brew install imagemagick     94% success
+  search → install → use → report
+    ↑                        |
+    └────── rankings ────────┘
 ```
 
 ## Install
@@ -22,13 +29,23 @@ npx @agentneeds/need "compress png images"
 npm install -g @agentneeds/need
 ```
 
-Or use directly with `npx @agentneeds/need`.
+That's it. MCP servers are automatically configured for **Claude Code**, **Cursor**, and **Claude Desktop** on install. Your AI agent can immediately discover and install CLI tools without you doing anything.
 
-## Usage
+Or run with npx: `npx @agentneeds/need "compress png images"`
 
-### Search
+## How agents use it
 
-Describe what you need. Get ranked results with install commands and success rates.
+Under the hood, `need` exposes three MCP tools that agents call autonomously:
+
+1. **`search_tools`** — semantic search across 10,000+ CLI tools
+2. **`install_tool`** — install the best match (security allowlist: brew, apt, npm, pip, cargo only)
+3. **`report_tool_usage`** — report success or failure, improving rankings for every future agent
+
+No API keys. No accounts. No configuration. The agent handles the entire loop without leaving your editor.
+
+## Works for humans too
+
+`need` also works as a standalone CLI — semantic search that understands intent, not just keywords.
 
 ```bash
 need convert pdf to png
@@ -36,49 +53,9 @@ need find duplicate files
 need compress video without losing quality
 ```
 
-### Install
-
-Search and install interactively:
-
-```bash
-need install "compress png images"
-```
-
-### Report
-
-Tell us if a tool worked. Every signal improves results for everyone.
-
-```bash
-need report pngquant --success
-need report sometool --fail
-```
-
-### MCP for AI agents
-
-One command configures `need` as an MCP server for your AI tools:
-
-```bash
-need setup
-```
-
-```
-  ✓ Claude Code — configured
-  ✓ Cursor — configured
-```
-
-Now your AI agent can:
-1. **Search** for the right tool via `search_tools`
-2. **Install** it via `install_tool` (security allowlist — only safe package manager commands)
-3. **Report** whether it worked via `report_tool_usage`
-
-The entire loop happens without leaving your editor.
-
 ## How it works
 
-1. You describe what you need in plain English
-2. Your query is converted to an embedding and matched against a vector database of CLI tools
-3. Results are ranked by semantic similarity + community success signals
-4. Install directly, or let your AI agent handle it
+Queries are embedded with OpenAI's text-embedding-3-small and matched against a pgvector database of CLI tools. Results are ranked by semantic similarity combined with community success/failure signals from `report_tool_usage`.
 
 ## Browse tools
 

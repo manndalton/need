@@ -2,9 +2,26 @@
   <img src="https://raw.githubusercontent.com/tuckerschreiber/need/main/assets/logo.svg" alt="need" width="400" />
 </p>
 
-<p align="center">Discover the right CLI tool for any task using plain English.</p>
+<p align="center">Tool discovery for AI agents.</p>
 
-Semantic search across 10,000+ CLI tools. Works standalone or as an MCP server for AI coding agents.
+AI agents hallucinate package names. `need` gives them a verified index of 10,000+ CLI tools — and a closed feedback loop that gets smarter with every install.
+
+## What happens
+
+You ask Claude to "compress these PNGs". Claude doesn't have `pngquant` installed and doesn't know what the best tool is. But `need` is running as an MCP server in the background, so Claude automatically:
+
+1. **Searches** need for "compress png images"
+2. **Installs** the top result (`brew install pngquant`)
+3. **Runs** it on your files
+4. **Reports** that it worked — so the next agent's search ranks `pngquant` higher
+
+You never interact with `need` directly. You just see the result.
+
+```
+  search → install → use → report
+    ↑                        |
+    └────── rankings ────────┘
+```
 
 ## Install
 
@@ -12,75 +29,47 @@ Semantic search across 10,000+ CLI tools. Works standalone or as an MCP server f
 npm install -g @agentneeds/need
 ```
 
-That's it. MCP servers are automatically configured for **Claude Code**, **Cursor**, and **Claude Desktop** on install. Your AI tools can immediately discover and install CLI tools.
+That's it. MCP servers are automatically configured for **Claude Code**, **Cursor**, and **Claude Desktop** on install. Your AI agent can immediately discover and install CLI tools without you doing anything.
 
-Or run directly: `npx @agentneeds/need "compress png images"`
+Or run with npx: `npx @agentneeds/need "compress png images"`
 
-## Commands
+## How agents use it
 
-### Search
+Under the hood, `need` exposes three MCP tools that agents call autonomously:
 
-```bash
-need convert pdf to png
-need compress video files
-need find duplicate files
-```
+1. **`search_tools`** — semantic search across 10,000+ CLI tools
+2. **`install_tool`** — install the best match (security allowlist: brew, apt, npm, pip, cargo only)
+3. **`report_tool_usage`** — report success or failure, improving rankings for every future agent
 
-### Install
+No API keys. No accounts. No configuration.
 
-Search and install interactively:
+### Setup
 
-```bash
-need install "compress png images"
-```
-
-### Report
-
-Help improve results by reporting whether a tool worked:
-
-```bash
-need report jq --success
-need report sometool --fail
-```
-
-### Project integration
-
-Add `need` instructions to your project so AI tools use it automatically:
-
-```bash
-need init
-```
-
-Generates config files for Claude Code, Cursor, GitHub Copilot, and Windsurf.
-
-### MCP setup
-
-Manually configure MCP servers (already done automatically on install):
+MCP is configured automatically on install. To manually reconfigure:
 
 ```bash
 need setup
 ```
 
-Supports **Claude Code**, **Cursor**, and **Claude Desktop**.
-
-### MCP server
-
-Run the MCP server directly (used by `need setup` under the hood):
+To add project-level config files for GitHub Copilot and Windsurf:
 
 ```bash
-need serve
+need init
 ```
 
-Exposes three tools:
-- `search_tools` — semantic search across CLI tools
-- `install_tool` — install with a security allowlist (brew, apt, npm, pip, cargo only)
-- `report_tool_usage` — report success or failure to improve rankings
+## Works for humans too
+
+`need` also works as a standalone CLI — semantic search that understands intent, not just keywords.
+
+```bash
+need convert pdf to png
+need find duplicate files
+need compress video without losing quality
+```
 
 ## How it works
 
-Queries are converted to embeddings and matched against a vector database of CLI tools using pgvector. Results are ranked by semantic similarity combined with community success/failure signals.
-
-No API keys required. No accounts. Just install and search.
+Queries are embedded and matched against a pgvector database of CLI tools. Results are ranked by semantic similarity combined with community success/failure signals from `report_tool_usage`.
 
 ## Links
 
