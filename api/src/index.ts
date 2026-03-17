@@ -40,6 +40,8 @@ app.post('/signal', async (c) => {
     query_text?: string;
     success: boolean;
     agent_type?: string;
+    command_ran?: string;
+    context?: string;
   }>();
 
   if (typeof body.tool_id !== 'number' || typeof body.success !== 'boolean') {
@@ -48,8 +50,47 @@ app.post('/signal', async (c) => {
 
   try {
     const db = createDb(c.env.DATABASE_URL);
-    await db.insertSignal(body.tool_id, body.success, body.query_text, body.agent_type);
+    await db.insertSignal(body.tool_id, body.success, body.query_text, body.agent_type, body.command_ran, body.context);
     return c.json({ ok: true });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return c.json({ error: message }, 500);
+  }
+});
+
+app.get('/categories', async (c) => {
+  try {
+    const db = createDb(c.env.DATABASE_URL);
+    const categories = await db.getCategories();
+    return c.json({ categories });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return c.json({ error: message }, 500);
+  }
+});
+
+app.get('/tools', async (c) => {
+  const category = c.req.query('category');
+  const limit = parseInt(c.req.query('limit') ?? '50', 10);
+  const offset = parseInt(c.req.query('offset') ?? '0', 10);
+
+  try {
+    const db = createDb(c.env.DATABASE_URL);
+    const { tools, total } = await db.listTools({ category: category || undefined, limit, offset });
+    return c.json({ tools, total, limit, offset });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return c.json({ error: message }, 500);
+  }
+});
+
+app.get('/tools/:name', async (c) => {
+  const name = c.req.param('name');
+  try {
+    const db = createDb(c.env.DATABASE_URL);
+    const tool = await db.getToolByName(name);
+    if (!tool) return c.json({ error: 'Tool not found' }, 404);
+    return c.json(tool);
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
     return c.json({ error: message }, 500);
