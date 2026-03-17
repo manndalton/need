@@ -1,9 +1,9 @@
-import type { SearchResult } from './types.js';
+import type { ToolResult } from './types.js';
 
 const DEFAULT_API_URL = 'https://need-api.schreibertucbiz.workers.dev';
 
 interface SearchResponse {
-  results: SearchResult[];
+  results: ToolResult[];
   query: string;
 }
 

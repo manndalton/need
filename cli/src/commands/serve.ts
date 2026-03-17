@@ -1,11 +1,11 @@
-import { execFile } from 'child_process';
-import { promisify } from 'util';
-
-const execFileAsync = promisify(execFile);
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import { NeedApiClient } from '../lib/api-client.js';
+
+const execFileAsync = promisify(execFile);
 
 export async function serveCommand(): Promise<void> {
   const server = new McpServer({

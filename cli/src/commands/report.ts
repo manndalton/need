@@ -1,5 +1,5 @@
 import { NeedApiClient } from '../lib/api-client.js';
-import type { SearchResult } from '../lib/types.js';
+import type { ToolResult } from '../lib/types.js';
 
 export async function reportCommand(
   toolName: string,
@@ -25,7 +25,7 @@ export async function reportCommand(
     const exact = results.find(
       (r) => r.name.toLowerCase() === toolName.toLowerCase(),
     );
-    const tool: SearchResult = exact ?? results[0];
+    const tool: ToolResult = exact ?? results[0];
 
     await client.reportSignal(tool.id, success, toolName);
 
