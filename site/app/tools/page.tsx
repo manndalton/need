@@ -16,27 +16,28 @@ export default async function ToolsPage() {
     : (await listTools({ limit: 1 })).total;
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12">
-      <div className="flex flex-col items-center gap-6 text-center">
+    <div className="mx-auto max-w-4xl px-4">
+      <div className="relative flex flex-col items-center gap-6 py-20 text-center sm:py-28">
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-muted/40 to-transparent" />
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
           Find the right CLI tool
         </h1>
-        <p className="text-muted-foreground max-w-lg text-lg">
+        <p className="text-muted-foreground/80 max-w-lg">
           Search {toolCount.toLocaleString()}+ tools in plain English
         </p>
         <SearchBar />
       </div>
 
       {categories.length > 0 && (
-        <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 pb-16 sm:grid-cols-3">
           {categories.map((cat) => (
             <Link
               key={cat.category}
               href={`/tools/category/${encodeURIComponent(cat.category)}`}
-              className="bg-card border-border hover:border-primary/30 rounded-xl border p-4 transition-colors"
+              className="bg-muted/30 hover:bg-muted/50 rounded-xl px-5 py-4 transition-colors"
             >
-              <div className="text-foreground font-medium capitalize">{cat.category}</div>
-              <div className="text-muted-foreground text-sm">{cat.count} tools</div>
+              <div className="text-foreground text-sm font-medium capitalize">{cat.category}</div>
+              <div className="text-muted-foreground/60 text-sm">{cat.count} tools</div>
             </Link>
           ))}
         </div>

@@ -6,10 +6,12 @@ import {
   ZapIcon,
 } from "lucide-react";
 
+import NeedLogo from "../components/logos/need";
 import FAQ from "../components/sections/faq/default";
 import Footer from "../components/sections/footer/default";
 import Items from "../components/sections/items/default";
 import Navbar from "../components/sections/navbar/default";
+import { SearchBar } from "../components/ui/search-bar";
 import { DotPattern } from "../components/ui/dot-pattern";
 import { InstallCommand } from "../components/ui/install-command";
 import { LayoutLines } from "../components/ui/layout-lines";
@@ -23,17 +25,12 @@ export default function Home() {
 
       {/* Navbar */}
       <Navbar
-        name="need"
-        logo={null}
-        showNavigation={false}
-        mobileLinks={[{ text: "Browse Tools", href: "/tools" }]}
+        name=""
+        logo={<NeedLogo />}
+        showNavigation={true}
+        mobileLinks={[]}
+        customNavigation={<SearchBar compact />}
         actions={[
-          {
-            text: "Browse Tools",
-            href: "/tools",
-            isButton: true,
-            variant: "ghost",
-          },
           {
             text: "GitHub",
             href: "https://github.com/tuckerschreiber/need",
@@ -56,7 +53,7 @@ export default function Home() {
               Find the right CLI tool in plain English
             </h1>
             <p className="animate-appear text-muted-foreground relative z-10 max-w-[540px] text-base font-medium text-balance opacity-0 delay-100">
-              <code className="font-mono">need</code> searches thousands of tools using semantic similarity. Works from your terminal or as an MCP server for AI coding agents.
+              Describe what you need, get ranked results from thousands of tools, and install in one command. Works standalone or as an MCP server for AI agents.
             </p>
             <div className="flex flex-col items-center gap-3">
               <InstallCommand command={`npx @needtools/need "compress png images"`} />
@@ -69,112 +66,80 @@ export default function Home() {
               </a>
             </div>
           </div>
+          <div className="animate-appear relative z-10 mx-auto mt-10 w-full max-w-[600px] opacity-0 delay-500">
+            <Terminal title="~">
+              <span className="text-muted-foreground">$</span>{" "}
+              <span className="text-foreground">need compress png images without losing quality</span>
+              {"\n\n"}
+              <span className="text-muted-foreground">{"  "}1.</span>{" "}
+              <span className="text-foreground">pngquant</span>
+              {"       "}
+              <span className="text-muted-foreground">brew install pngquant</span>
+              {"     "}
+              <span className="text-brand">92%</span>
+              {"\n"}
+              <span className="text-muted-foreground">{"  "}2.</span>{" "}
+              <span className="text-foreground">optipng</span>
+              {"        "}
+              <span className="text-muted-foreground">brew install optipng</span>
+              {"       "}
+              <span className="text-brand">87%</span>
+              {"\n"}
+              <span className="text-muted-foreground">{"  "}3.</span>{" "}
+              <span className="text-foreground">imagemagick</span>
+              {"    "}
+              <span className="text-muted-foreground">brew install imagemagick</span>
+              {"   "}
+              <span className="text-brand">94%</span>
+            </Terminal>
+          </div>
         </div>
       </Section>
 
-      {/* How It Works */}
+      {/* Two commands and you're in */}
       <Section>
-        <div className="mx-auto max-w-[860px] flex flex-col items-center gap-10">
+        <div className="mx-auto max-w-[600px] flex flex-col items-center gap-10">
           <div className="flex flex-col items-center gap-3 text-center">
             <h2 className="text-2xl font-semibold sm:text-4xl">
-              How it works
+              Two commands and you&apos;re in
             </h2>
-            <p className="text-muted-foreground max-w-[540px] text-sm text-balance">
-              Search engines match keywords. LLMs hallucinate package names. <code className="font-mono">need</code> matches intent.
-            </p>
           </div>
-          <div className="grid w-full gap-10">
-            {/* Step 1: Search */}
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-10">
-              <div className="flex flex-col gap-1.5 md:w-1/3 md:pt-3">
-                <span className="text-brand text-sm font-semibold">1. Search</span>
-                <p className="text-muted-foreground text-sm">
-                  Describe what you need. Get ranked results by semantic similarity.
-                </p>
-              </div>
-              <Terminal title="~" className="flex-1">
+          <div className="grid w-full gap-8">
+            <div className="flex flex-col gap-3">
+              <span className="text-brand text-sm font-semibold">1. Try it</span>
+              <Terminal title="~">
                 <span className="text-muted-foreground">$</span>{" "}
-                <span className="text-foreground">need compress png images without losing quality</span>
+                <span className="text-foreground">npx @needtools/need &quot;convert video to gif&quot;</span>
                 {"\n\n"}
                 <span className="text-muted-foreground">{"  "}1.</span>{" "}
-                <span className="text-foreground">pngquant</span>
-                {"       "}
-                <span className="text-muted-foreground">brew install pngquant</span>
-                {"     "}
-                <span className="text-brand">92%</span>
+                <span className="text-foreground">ffmpeg</span>
+                {"         "}
+                <span className="text-muted-foreground">brew install ffmpeg</span>
+                {"        "}
+                <span className="text-brand">95%</span>
                 {"\n"}
                 <span className="text-muted-foreground">{"  "}2.</span>{" "}
-                <span className="text-foreground">optipng</span>
+                <span className="text-foreground">gifski</span>
+                {"         "}
+                <span className="text-muted-foreground">brew install gifski</span>
                 {"        "}
-                <span className="text-muted-foreground">brew install optipng</span>
-                {"       "}
-                <span className="text-brand">87%</span>
-                {"\n"}
-                <span className="text-muted-foreground">{"  "}3.</span>{" "}
-                <span className="text-foreground">imagemagick</span>
-                {"    "}
-                <span className="text-muted-foreground">brew install imagemagick</span>
-                {"   "}
-                <span className="text-brand">94%</span>
+                <span className="text-brand">89%</span>
               </Terminal>
             </div>
-
-            {/* Step 2: Install */}
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-10">
-              <div className="flex flex-col gap-1.5 md:w-1/3 md:pt-3">
-                <span className="text-brand text-sm font-semibold">2. Install</span>
-                <p className="text-muted-foreground text-sm">
-                  Pick a tool and install it directly.
-                </p>
-              </div>
-              <Terminal title="~" className="flex-1">
+            <div className="flex flex-col gap-3">
+              <span className="text-brand text-sm font-semibold">2. Add to your AI agent</span>
+              <Terminal title="~">
                 <span className="text-muted-foreground">$</span>{" "}
-                <span className="text-foreground">need install &quot;convert video to gif&quot;</span>
-                {"\n"}
-                {"  "}Install which tool? [1-5/n]{" "}
-                <span className="text-foreground">1</span>
-                {"\n"}
-                {"  "}Running:{" "}
-                <span className="text-muted-foreground">brew install ffmpeg</span>
-                {"\n"}
-                {"  "}
-                <span className="text-brand">✓</span> Installed ffmpeg successfully.
-              </Terminal>
-            </div>
-
-            {/* Step 3: Report */}
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-10">
-              <div className="flex flex-col gap-1.5 md:w-1/3 md:pt-3">
-                <span className="text-brand text-sm font-semibold">3. Report</span>
-                <p className="text-muted-foreground text-sm">
-                  Tell us if it worked. Every signal improves results.
-                </p>
-              </div>
-              <Terminal title="~" className="flex-1">
-                <span className="text-muted-foreground">$</span>{" "}
-                <span className="text-foreground">need report pngquant --success</span>
-                {"\n"}
-                {"  "}
-                <span className="text-brand">✓</span> Reported success for &quot;pngquant&quot;.
-              </Terminal>
-            </div>
-            {/* Step 4: Connect */}
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-10">
-              <div className="flex flex-col gap-1.5 md:w-1/3 md:pt-3">
-                <span className="text-brand text-sm font-semibold">4. Connect</span>
-                <p className="text-muted-foreground text-sm">
-                  One command adds <code className="font-mono">need</code> as an MCP server for your AI agent.
-                </p>
-              </div>
-              <Terminal title="~" className="flex-1">
-                <span className="text-muted-foreground">$</span>{" "}
-                <span className="text-foreground">need setup</span>
+                <span className="text-foreground">npx @needtools/need setup</span>
                 {"\n"}
                 {"  "}
                 <span className="text-brand">✓</span> Claude Code — configured
                 {"\n"}
                 {"  "}
                 <span className="text-brand">✓</span> Cursor — configured
+                {"\n\n"}
+                {"  "}
+                <span className="text-muted-foreground">Your agent can now search, install, and report tools via MCP.</span>
               </Terminal>
             </div>
           </div>
@@ -287,8 +252,8 @@ export default function Home() {
 
       {/* Footer */}
       <Footer
-        logo={null}
-        name="need"
+        logo={<NeedLogo />}
+        name=""
         columns={[]}
         copyright="© 2026 Tucker Schreiber"
         policies={[]}

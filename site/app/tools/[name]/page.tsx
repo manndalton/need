@@ -1,5 +1,4 @@
 import { getToolByName, listTools } from "@/lib/api";
-import { Badge } from "@/components/ui/badge";
 import { InstallCommand } from "@/components/ui/install-command";
 import { ToolCard } from "@/components/ui/tool-card";
 import { notFound } from "next/navigation";
@@ -23,31 +22,39 @@ export default async function ToolPage({
     : [];
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
+    <div className="mx-auto max-w-3xl px-4 py-16">
       {/* Top */}
       <div className="flex flex-col gap-4">
-        <h1 className="font-mono text-3xl font-bold">{tool.name}</h1>
+        <h1 className="font-mono text-2xl font-bold sm:text-3xl">{tool.name}</h1>
         {tool.short_description && (
-          <p className="text-muted-foreground text-lg">{tool.short_description}</p>
+          <p className="text-muted-foreground/80 text-lg">{tool.short_description}</p>
         )}
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="outline">{tool.package_manager}</Badge>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="text-muted-foreground text-sm">{tool.package_manager}</span>
           {tool.platform?.map((p) => (
-            <Badge key={p} variant="secondary">{p}</Badge>
+            <span key={p} className="text-muted-foreground/60 text-sm">{p}</span>
           ))}
           {tool.category && (
-            <Link href={`/tools/category/${encodeURIComponent(tool.category)}`}>
-              <Badge variant="brand-secondary">{tool.category}</Badge>
+            <Link
+              href={`/tools/category/${encodeURIComponent(tool.category)}`}
+              className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+            >
+              {tool.category}
             </Link>
           )}
         </div>
-        <InstallCommand command={tool.install_command} />
+        <div className="mt-2 flex flex-col gap-2">
+          <p className="text-muted-foreground/50 text-xs">Try with need</p>
+          <InstallCommand command={`npx @needtools/need ${tool.name}`} />
+          <p className="text-muted-foreground/50 mt-2 text-xs">Or install directly</p>
+          <InstallCommand command={tool.install_command} />
+        </div>
         {tool.source_url && (
           <a
             href={tool.source_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm transition-colors"
+            className="text-muted-foreground/60 hover:text-muted-foreground inline-flex items-center gap-1 text-sm transition-colors"
           >
             Source <ExternalLinkIcon className="size-3" />
           </a>
@@ -55,18 +62,18 @@ export default async function ToolPage({
       </div>
 
       {/* Middle */}
-      <div className="mt-10 flex flex-col gap-8">
+      <div className="mt-12 flex flex-col gap-10">
         <div>
-          <h2 className="mb-3 text-lg font-semibold">About</h2>
+          <h2 className="text-muted-foreground/60 mb-3 text-xs font-medium uppercase tracking-wider">About</h2>
           <p className="text-muted-foreground leading-relaxed">{tool.description}</p>
         </div>
 
         {tool.binaries && tool.binaries.length > 0 && (
           <div>
-            <h2 className="mb-3 text-lg font-semibold">Commands</h2>
+            <h2 className="text-muted-foreground/60 mb-3 text-xs font-medium uppercase tracking-wider">Commands</h2>
             <div className="flex flex-wrap gap-2">
               {tool.binaries.map((bin) => (
-                <code key={bin} className="bg-muted rounded px-2 py-1 font-mono text-sm">{bin}</code>
+                <code key={bin} className="bg-muted/30 rounded-md px-2.5 py-1 font-mono text-sm">{bin}</code>
               ))}
             </div>
           </div>
@@ -74,13 +81,13 @@ export default async function ToolPage({
 
         {tool.usage_examples && tool.usage_examples.length > 0 && (
           <div>
-            <h2 className="mb-3 text-lg font-semibold">Examples</h2>
+            <h2 className="text-muted-foreground/60 mb-3 text-xs font-medium uppercase tracking-wider">Examples</h2>
             <div className="flex flex-col gap-4">
               {tool.usage_examples.map((example, i) => (
-                <div key={i} className="flex flex-col gap-1">
-                  <span className="text-muted-foreground text-sm">{example.description}</span>
-                  <code className="bg-muted rounded-lg px-4 py-3 font-mono text-sm">
-                    <span className="text-muted-foreground">$ </span>{example.command}
+                <div key={i} className="flex flex-col gap-1.5">
+                  <span className="text-muted-foreground/80 text-sm">{example.description}</span>
+                  <code className="bg-muted/30 rounded-lg px-4 py-3 font-mono text-sm">
+                    <span className="text-muted-foreground/50">$ </span>{example.command}
                   </code>
                 </div>
               ))}
@@ -91,9 +98,9 @@ export default async function ToolPage({
 
       {/* Bottom */}
       {related.length > 0 && (
-        <div className="mt-12">
-          <h2 className="mb-4 text-lg font-semibold">Related Tools</h2>
-          <div className="grid gap-3 sm:grid-cols-2">
+        <div className="mt-16">
+          <h2 className="text-muted-foreground/60 mb-4 text-xs font-medium uppercase tracking-wider">Related Tools</h2>
+          <div className="grid gap-2 sm:grid-cols-2">
             {related.map((t) => (
               <ToolCard key={t.id} tool={t} />
             ))}
@@ -101,12 +108,6 @@ export default async function ToolPage({
         </div>
       )}
 
-      <div className="mt-12 text-center">
-        <p className="text-muted-foreground text-sm">Try it in your terminal</p>
-        <code className="text-foreground mt-2 inline-block font-mono text-sm">
-          npx @needtools/need {tool.name}
-        </code>
-      </div>
     </div>
   );
 }

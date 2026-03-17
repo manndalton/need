@@ -15,10 +15,10 @@ export default async function SearchPage({
 
   if (!q) {
     return (
-      <div className="mx-auto max-w-4xl px-4 py-12">
+      <div className="mx-auto max-w-4xl px-4 py-16">
         <div className="flex flex-col items-center gap-6">
           <SearchBar />
-          <p className="text-muted-foreground">Enter a search query to find CLI tools.</p>
+          <p className="text-muted-foreground/60">Enter a search query to find CLI tools.</p>
         </div>
       </div>
     );
@@ -27,20 +27,20 @@ export default async function SearchPage({
   const results = await searchTools(q, 20);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12">
-      <div className="flex flex-col items-center gap-6">
+    <div className="mx-auto max-w-4xl px-4 py-16">
+      <div className="flex flex-col items-center gap-4">
         <SearchBar defaultValue={q} />
-        <p className="text-muted-foreground text-sm">
+        <p className="text-muted-foreground/60 text-sm">
           {results.length} result{results.length !== 1 ? "s" : ""} for &ldquo;{q}&rdquo;
         </p>
       </div>
 
-      <div className="mt-8 flex flex-col gap-3">
+      <div className="mt-10 flex flex-col gap-2">
         {results.map((tool) => (
           <ToolCard key={tool.id} tool={tool} showSimilarity />
         ))}
         {results.length === 0 && (
-          <p className="text-muted-foreground text-center">No tools found. Try a different search.</p>
+          <p className="text-muted-foreground/60 py-12 text-center">No tools found. Try a different search.</p>
         )}
       </div>
     </div>

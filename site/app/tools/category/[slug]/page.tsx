@@ -20,36 +20,37 @@ export default async function CategoryPage({
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12">
-      <div className="flex flex-col items-center gap-6 text-center">
-        <h1 className="text-3xl font-bold capitalize tracking-tight">{category}</h1>
-        <p className="text-muted-foreground">{total} tools</p>
+    <div className="mx-auto max-w-4xl px-4">
+      <div className="relative flex flex-col items-center gap-4 py-16 text-center">
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-muted/40 to-transparent" />
+        <h1 className="text-2xl font-bold capitalize tracking-tight">{category}</h1>
+        <p className="text-muted-foreground/60 text-sm">{total} tools</p>
         <SearchBar />
       </div>
 
-      <div className="mt-8 flex flex-col gap-3">
+      <div className="flex flex-col gap-2 pb-16">
         {tools.map((tool) => (
           <ToolCard key={tool.id} tool={tool} />
         ))}
       </div>
 
       {totalPages > 1 && (
-        <div className="mt-8 flex justify-center gap-2">
+        <div className="flex justify-center gap-2 pb-16">
           {currentPage > 1 && (
             <a
               href={`/tools/category/${slug}?page=${currentPage - 1}`}
-              className="bg-muted rounded-lg px-4 py-2 text-sm"
+              className="bg-muted/30 hover:bg-muted/50 rounded-lg px-4 py-2 text-sm transition-colors"
             >
               Previous
             </a>
           )}
-          <span className="text-muted-foreground px-4 py-2 text-sm">
+          <span className="text-muted-foreground/60 px-4 py-2 text-sm">
             Page {currentPage} of {totalPages}
           </span>
           {currentPage < totalPages && (
             <a
               href={`/tools/category/${slug}?page=${currentPage + 1}`}
-              className="bg-muted rounded-lg px-4 py-2 text-sm"
+              className="bg-muted/30 hover:bg-muted/50 rounded-lg px-4 py-2 text-sm transition-colors"
             >
               Next
             </a>
