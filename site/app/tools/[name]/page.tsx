@@ -4,6 +4,48 @@ import { ToolCard } from "@/components/ui/tool-card";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ExternalLinkIcon } from "lucide-react";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ name: string }>;
+}): Promise<Metadata> {
+  const { name } = await params;
+  const tool = await getToolByName(decodeURIComponent(name));
+  if (!tool) return { title: "Tool not found" };
+
+  const description =
+    tool.short_description || tool.description?.slice(0, 160) || "";
+  const keywords = [
+    tool.name,
+    tool.package_manager,
+    tool.category,
+    "CLI tool",
+    "AI agent",
+    "developer tool",
+  ].filter(Boolean) as string[];
+
+  return {
+    title: tool.name,
+    description,
+    keywords,
+    alternates: {
+      canonical: `https://agentneeds.dev/tools/${encodeURIComponent(tool.name)}`,
+    },
+    openGraph: {
+      title: tool.name,
+      description,
+      type: "article",
+      url: `https://agentneeds.dev/tools/${encodeURIComponent(tool.name)}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: tool.name,
+      description,
+    },
+  };
+}
 
 export default async function ToolPage({
   params,
@@ -20,8 +62,27 @@ export default async function ToolPage({
       )
     : [];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: tool.name,
+    description: tool.description,
+    applicationCategory: tool.category || "DeveloperApplication",
+    operatingSystem: tool.platform?.join(", "),
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+    url: `https://agentneeds.dev/tools/${encodeURIComponent(tool.name)}`,
+  };
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Top */}
       <div className="flex flex-col gap-4">
         <h1 className="font-mono text-xl">{tool.name}</h1>

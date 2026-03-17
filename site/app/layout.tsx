@@ -1,31 +1,59 @@
+import "@/app/globals.css";
+
 import type { Metadata } from "next";
-import { JetBrains_Mono, Inter } from "next/font/google";
-import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
+import { ThemeProvider } from "@/components/contexts/theme-provider";
+import { geist, geistMono } from "@/lib/fonts";
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jet",
-});
+import { siteConfig } from "../config/site";
 
 export const metadata: Metadata = {
-  title: "need — Tool discovery for AI agents",
-  description:
-    "Find the right CLI tool instantly. Semantic search across a curated registry of developer tools.",
+  title: {
+    default: siteConfig.name,
+    template: `%s - ${siteConfig.name}`,
+  },
+  metadataBase: new URL(siteConfig.url),
+  description: siteConfig.description,
+  keywords: [
+    "AI agents",
+    "tool discovery",
+    "MCP",
+    "developer tools",
+    "CLI",
+    "semantic search",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteConfig.url,
+    title: siteConfig.name,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+    images: [{ url: siteConfig.ogImage, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    creator: "@tuckerschreiber",
+  },
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body style={{ fontFamily: "var(--font-inter)" }}>{children}</body>
+    <html lang="en" style={{ colorScheme: "dark" }} className="dark">
+      <body
+        className={`${geist.variable} ${geist.className} ${geistMono.variable} bg-background antialiased`}
+      >
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }
