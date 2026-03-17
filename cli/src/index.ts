@@ -51,4 +51,12 @@ program
     await installCommand(query);
   });
 
+program
+  .command('init')
+  .description('Add need integration files to current project for AI coding tools')
+  .action(async () => {
+    const { initCommand } = await import('./commands/init.js');
+    await initCommand();
+  });
+
 program.parse();
