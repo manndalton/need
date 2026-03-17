@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "need": {
+      "command": "npx",
+      "args": ["@agentneeds/need", "serve"]
+    }
+  }
+}
