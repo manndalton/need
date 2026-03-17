@@ -14,7 +14,7 @@
 AI agents hallucinate package names. `need` gives them a verified index of 10,000+ CLI tools — and a closed feedback loop that gets smarter with every install.
 
 <p align="center">
-  <img src="assets/demo.gif" alt="need in action inside Claude Code" width="600" />
+  <img src="assets/demo.gif" alt="need in action inside Claude Code" width="640" />
 </p>
 
 ## What happens
