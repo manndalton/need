@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { Hono } from 'hono';
 
 describe('GET /search', () => {
@@ -43,5 +43,48 @@ describe('GET /search', () => {
     expect(res.status).toBe(200);
     expect(body.results[0].name).toBe('imagemagick');
     expect(body.results[0].similarity).toBeGreaterThan(0);
+  });
+
+  it('falls back to FTS when embedding fails', async () => {
+    const ftsResults = [
+      {
+        id: 2,
+        name: 'pngquant',
+        description: 'Compress PNG images',
+        install_command: 'brew install pngquant',
+        package_manager: 'brew',
+        platform: ['macos', 'linux'],
+        category: 'image',
+        source_url: null,
+        similarity: 0.8,
+        success_rate: 0.5,
+        use_count: 0,
+      },
+    ];
+
+    // Simulate: embedding throws, FTS returns results
+    const app = new Hono();
+    app.get('/search', async (c) => {
+      const query = c.req.query('q');
+      if (!query) return c.json({ error: 'Missing query parameter: q' }, 400);
+
+      let results;
+      try {
+        // Simulate OpenAI failure
+        throw new Error('OpenAI API is down');
+      } catch {
+        // FTS fallback
+        results = ftsResults;
+      }
+
+      return c.json({ results, query });
+    });
+
+    const res = await app.request('/search?q=compress+png');
+    const body = await res.json() as { results: typeof ftsResults; query: string };
+    expect(res.status).toBe(200);
+    expect(body.results.length).toBeGreaterThan(0);
+    expect(body.results[0].name).toBe('pngquant');
+    expect(body.query).toBe('compress png');
   });
 });

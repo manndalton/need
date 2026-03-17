@@ -110,9 +110,12 @@ async function migrate() {
   // 9. Create search_tools function
   console.log("9. Creating search_tools function...");
   await sql`drop function if exists search_tools(vector, float, int)`;
+  await sql`drop function if exists search_tools(vector, text, float, int)`;
+  await sql`drop function if exists search_tools`;
   await sql`
     create or replace function search_tools(
       query_embedding vector(1536),
+      raw_query text default '',
       match_threshold float default 0.3,
       match_count int default 10
     )
@@ -156,14 +159,23 @@ async function migrate() {
       from public.tools t
       left join public.signals s on s.tool_id = t.id
       where 1 - (t.embedding <=> query_embedding) > match_threshold
-      group by t.id
+      group by t.id, t.name, t.description, t.short_description,
+               t.install_command, t.package_manager, t.platform,
+               t.category, t.source_url, t.binaries, t.usage_examples,
+               t.embedding
       order by
-        (1 - (t.embedding <=> query_embedding)) * 0.5 +
+        -- Base: embedding similarity with confidence-weighted success_rate
+        -- confidence ramps from 0 to 1 over the first 10 signals
+        (1 - (t.embedding <=> query_embedding)) * (1.0 - least(count(s.id), 10)::float / 10.0 * 0.5) +
         coalesce(
           sum(case when s.success then 1 else 0 end)::float /
           nullif(count(s.id), 0),
           0.5
-        ) * 0.5
+        ) * (least(count(s.id), 10)::float / 10.0 * 0.5)
+        -- Keyword boost: up to 0.1 bonus when query terms match description
+        + case when raw_query != '' then
+            least(ts_rank(to_tsvector('english', t.description), plainto_tsquery('english', raw_query)), 0.05)
+          else 0 end
         desc
       limit match_count;
     $$

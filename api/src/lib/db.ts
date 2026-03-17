@@ -21,13 +21,29 @@ export function createDb(databaseUrl: string) {
   const sql = neon(databaseUrl);
 
   return {
-    async searchTools(queryEmbedding: number[], limit: number = 10): Promise<SearchResult[]> {
+    async searchTools(queryEmbedding: number[], limit: number = 10, queryText: string = ''): Promise<SearchResult[]> {
       const results = await sql`
         SELECT * FROM search_tools(
           ${JSON.stringify(queryEmbedding)}::vector(1536),
+          ${queryText},
           0.4,
           ${limit}
         )
+      `;
+      return results as SearchResult[];
+    },
+
+    async searchToolsFTS(query: string, limit: number = 10): Promise<SearchResult[]> {
+      const results = await sql`
+        SELECT t.id, t.name, t.description, t.short_description,
+               t.install_command, t.package_manager, t.platform,
+               t.category, t.source_url, t.binaries, t.usage_examples,
+               ts_rank(to_tsvector('english', t.description), plainto_tsquery('english', ${query})) as similarity,
+               0.5 as success_rate, 0 as use_count
+        FROM public.tools t
+        WHERE to_tsvector('english', t.description) @@ plainto_tsquery('english', ${query})
+        ORDER BY similarity DESC
+        LIMIT ${limit}
       `;
       return results as SearchResult[];
     },

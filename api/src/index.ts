@@ -56,8 +56,15 @@ app.get('/search', async (c) => {
       return c.json({ results: [exactMatch], query });
     }
 
-    const embedding = await getEmbedding(query, { apiKey: c.env.OPENAI_API_KEY });
-    const results = await db.searchTools(embedding, limit);
+    let results;
+    try {
+      const embedding = await getEmbedding(query, { apiKey: c.env.OPENAI_API_KEY });
+      results = await db.searchTools(embedding, limit, query);
+    } catch (embeddingErr) {
+      // OpenAI is down — fall back to full-text search
+      console.error('Embedding failed, falling back to FTS:', embeddingErr);
+      results = await db.searchToolsFTS(query, limit);
+    }
 
     // If there's an exact match, put it first and deduplicate
     let finalResults = results;
