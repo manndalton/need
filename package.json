@@ -3,11 +3,7 @@
   "private": true,
   "workspaces": [
     "cli",
-    "api",
-    "site"
+    "api"
   ],
-  "dependencies": {
-    "@agentneeds/need": "^0.1.0"
-  },
   "version": "0.0.1"
 }
