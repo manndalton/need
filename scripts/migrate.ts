@@ -1,8 +1,11 @@
 import { neon } from "@neondatabase/serverless";
 
-const sql = neon(
-  "REDACTED_DATABASE_URL"
-);
+const DATABASE_URL = process.env.DATABASE_URL;
+if (!DATABASE_URL) {
+  console.error("DATABASE_URL environment variable is required");
+  process.exit(1);
+}
+const sql = neon(DATABASE_URL);
 
 async function migrate() {
   console.log("Starting migration...\n");
@@ -91,8 +94,22 @@ async function migrate() {
   `;
   console.log("   Done.\n");
 
+  // 8a. Add new columns to tools table
+  console.log("8a. Adding new columns to tools table...");
+  await sql`ALTER TABLE public.tools ADD COLUMN IF NOT EXISTS binaries text[] DEFAULT '{}'`;
+  await sql`ALTER TABLE public.tools ADD COLUMN IF NOT EXISTS usage_examples jsonb DEFAULT '[]'`;
+  await sql`ALTER TABLE public.tools ADD COLUMN IF NOT EXISTS short_description text`;
+  console.log("   Done.\n");
+
+  // 8b. Add new columns to signals table
+  console.log("8b. Adding new columns to signals table...");
+  await sql`ALTER TABLE public.signals ADD COLUMN IF NOT EXISTS command_ran text`;
+  await sql`ALTER TABLE public.signals ADD COLUMN IF NOT EXISTS context text`;
+  console.log("   Done.\n");
+
   // 9. Create search_tools function
   console.log("9. Creating search_tools function...");
+  await sql`drop function if exists search_tools(vector, float, int)`;
   await sql`
     create or replace function search_tools(
       query_embedding vector(1536),
@@ -103,11 +120,14 @@ async function migrate() {
       id bigint,
       name text,
       description text,
+      short_description text,
       install_command text,
       package_manager text,
       platform text[],
       category text,
       source_url text,
+      binaries text[],
+      usage_examples jsonb,
       similarity float,
       success_rate float,
       use_count bigint
@@ -118,11 +138,14 @@ async function migrate() {
         t.id,
         t.name,
         t.description,
+        t.short_description,
         t.install_command,
         t.package_manager,
         t.platform,
         t.category,
         t.source_url,
+        t.binaries,
+        t.usage_examples,
         1 - (t.embedding <=> query_embedding) as similarity,
         coalesce(
           sum(case when s.success then 1 else 0 end)::float /
