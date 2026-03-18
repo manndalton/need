@@ -13,4 +13,5 @@ export interface ToolResult {
   similarity: number;
   success_rate: number;
   use_count: number;
+  github_stars: number;
 }

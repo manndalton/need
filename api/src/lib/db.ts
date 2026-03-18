@@ -12,6 +12,7 @@ export interface SearchResult {
   similarity: number;
   success_rate: number;
   use_count: number;
+  github_stars: number;
   short_description: string | null;
   binaries: string[];
   usage_examples: Array<{ description: string; command: string }>;
@@ -38,10 +39,21 @@ export function createDb(databaseUrl: string) {
         SELECT t.id, t.name, t.description, t.short_description,
                t.install_command, t.package_manager, t.platform,
                t.category, t.source_url, t.binaries, t.usage_examples,
-               ts_rank(to_tsvector('english', t.description), plainto_tsquery('english', ${query})) as similarity,
-               0.5 as success_rate, 0 as use_count
+               t.github_stars,
+               ts_rank(to_tsvector('english', t.description), plainto_tsquery('english', ${query})) AS similarity,
+               COALESCE(
+                 SUM(CASE WHEN sig.success THEN 1 ELSE 0 END)::float /
+                 NULLIF(COUNT(sig.id), 0),
+                 0.5
+               ) AS success_rate,
+               COUNT(sig.id) AS use_count
         FROM public.tools t
+        LEFT JOIN public.signals sig ON sig.tool_id = t.id
         WHERE to_tsvector('english', t.description) @@ plainto_tsquery('english', ${query})
+        GROUP BY t.id, t.name, t.description, t.short_description,
+                 t.install_command, t.package_manager, t.platform,
+                 t.category, t.source_url, t.binaries, t.usage_examples,
+                 t.github_stars
         ORDER BY similarity DESC
         LIMIT ${limit}
       `;
@@ -71,12 +83,25 @@ export function createDb(databaseUrl: string) {
 
     async getToolByName(name: string): Promise<SearchResult | null> {
       const results = await sql`
-        SELECT id, name, description, short_description, install_command,
-               package_manager, platform, category, source_url, binaries,
-               usage_examples,
-               0 as similarity, 0.5 as success_rate, 0 as use_count
-        FROM tools
-        WHERE lower(name) = lower(${name})
+        SELECT
+          t.id, t.name, t.description, t.short_description,
+          t.install_command, t.package_manager, t.platform,
+          t.category, t.source_url, t.binaries, t.usage_examples,
+          t.github_stars,
+          0 AS similarity,
+          COALESCE(
+            SUM(CASE WHEN sig.success THEN 1 ELSE 0 END)::float /
+            NULLIF(COUNT(sig.id), 0),
+            0.5
+          ) AS success_rate,
+          COUNT(sig.id) AS use_count
+        FROM tools t
+        LEFT JOIN signals sig ON sig.tool_id = t.id
+        WHERE lower(t.name) = lower(${name})
+        GROUP BY t.id, t.name, t.description, t.short_description,
+                 t.install_command, t.package_manager, t.platform,
+                 t.category, t.source_url, t.binaries, t.usage_examples,
+                 t.github_stars
         LIMIT 1
       `;
       return (results[0] as SearchResult) ?? null;
@@ -88,24 +113,48 @@ export function createDb(databaseUrl: string) {
 
       const results = options.category
         ? await sql`
-            SELECT id, name, description, short_description, install_command,
-                   package_manager, platform, category, source_url, binaries,
-                   usage_examples,
-                   0 as similarity, 0.5 as success_rate, 0 as use_count,
+            SELECT t.id, t.name, t.description, t.short_description,
+                   t.install_command, t.package_manager, t.platform,
+                   t.category, t.source_url, t.binaries, t.usage_examples,
+                   t.github_stars,
+                   0 AS similarity,
+                   COALESCE(
+                     SUM(CASE WHEN sig.success THEN 1 ELSE 0 END)::float /
+                     NULLIF(COUNT(sig.id), 0),
+                     0.5
+                   ) AS success_rate,
+                   COUNT(sig.id) AS use_count,
                    COUNT(*) OVER()::int AS total_count
-            FROM tools
-            WHERE category = ${options.category}
-            ORDER BY name ASC
+            FROM tools t
+            LEFT JOIN signals sig ON sig.tool_id = t.id
+            WHERE t.category = ${options.category}
+            GROUP BY t.id, t.name, t.description, t.short_description,
+                     t.install_command, t.package_manager, t.platform,
+                     t.category, t.source_url, t.binaries, t.usage_examples,
+                     t.github_stars
+            ORDER BY t.name ASC
             LIMIT ${limit} OFFSET ${offset}
           `
         : await sql`
-            SELECT id, name, description, short_description, install_command,
-                   package_manager, platform, category, source_url, binaries,
-                   usage_examples,
-                   0 as similarity, 0.5 as success_rate, 0 as use_count,
+            SELECT t.id, t.name, t.description, t.short_description,
+                   t.install_command, t.package_manager, t.platform,
+                   t.category, t.source_url, t.binaries, t.usage_examples,
+                   t.github_stars,
+                   0 AS similarity,
+                   COALESCE(
+                     SUM(CASE WHEN sig.success THEN 1 ELSE 0 END)::float /
+                     NULLIF(COUNT(sig.id), 0),
+                     0.5
+                   ) AS success_rate,
+                   COUNT(sig.id) AS use_count,
                    COUNT(*) OVER()::int AS total_count
-            FROM tools
-            ORDER BY name ASC
+            FROM tools t
+            LEFT JOIN signals sig ON sig.tool_id = t.id
+            GROUP BY t.id, t.name, t.description, t.short_description,
+                     t.install_command, t.package_manager, t.platform,
+                     t.category, t.source_url, t.binaries, t.usage_examples,
+                     t.github_stars
+            ORDER BY t.name ASC
             LIMIT ${limit} OFFSET ${offset}
           `;
 
