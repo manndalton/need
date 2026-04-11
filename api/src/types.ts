@@ -85,6 +85,7 @@ export interface HealthResponse {
 /** Pagination parameters */
 export interface PaginationParams {
   page?: number;
+  /** Capped at 100 to avoid overly large responses */
   limit?: number;
 }
 
@@ -99,6 +100,7 @@ export interface PaginatedResponse<T> {
 
 /** Environment configuration */
 export interface EnvConfig {
+  /** Defaults to 3000 in development */
   port: number;
   nodeEnv: 'development' | 'production' | 'test';
   logLevel: 'debug' | 'info' | 'warn' | 'error';
