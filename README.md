@@ -64,31 +64,8 @@ need find duplicate files
 need compress video without losing quality
 ```
 
+> **Personal note:** I also find this useful for quickly looking up tools I half-remember — e.g. `need split large files` when I can't recall whether it was `split` or `csplit`.
+
 ## How it works
 
-Queries are embedded with OpenAI's text-embedding-3-small and matched against a pgvector database of CLI tools. Results are ranked by semantic similarity combined with community success/failure signals from `report_tool_usage`.
-
-## Browse tools
-
-Explore all 10,000+ indexed tools at [agentneeds.dev](https://agentneeds.dev).
-
-## Architecture
-
-| Package | Description |
-|---------|-------------|
-| [`cli/`](./cli) | The `need` CLI and MCP server ([npm](https://www.npmjs.com/package/@agentneeds/need)) |
-| [`api/`](./api) | Search API — Cloudflare Workers + Neon Postgres + pgvector |
-| [`site/`](./site) | Marketing site and tool directory ([agentneeds.dev](https://agentneeds.dev)) |
-
-## Contributing
-
-```bash
-git clone https://github.com/tuckerschreiber/need.git
-cd need
-npm install
-cd cli && npm run build && npm test
-```
-
-## License
-
-MIT
+Queries are embedded with OpenAI's text-embedding-3-small and matched against a pgvector database of CLI tools. Results are ranked by semantic similarity combined with community succe
