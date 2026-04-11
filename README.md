@@ -66,6 +66,8 @@ need compress video without losing quality
 
 > **Personal note:** I also find this useful for quickly looking up tools I half-remember — e.g. `need split large files` when I can't recall whether it was `split` or `csplit`.
 
+> **My note:** I primarily use this on macOS with Homebrew, so most of my testing has been against the `brew` install path. If you're on Linux and hit issues with `apt` installs, feel free to open an issue on the upstream repo.
+
 ## How it works
 
-Queries are embedded with OpenAI's text-embedding-3-small and matched against a pgvector database of CLI tools. Results are ranked by semantic similarity combined with community succe
+Quer
