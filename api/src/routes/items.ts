@@ -62,6 +62,11 @@ router.post('/', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Title is required' });
     }
 
+    // Enforce a reasonable title length limit
+    if (title.trim().length > 200) {
+      return res.status(400).json({ error: 'Title must be 200 characters or fewer' });
+    }
+
     const id = crypto.randomUUID();
     const now = new Date().toISOString();
 
@@ -102,44 +107,3 @@ router.patch('/:id', async (req: Request, res: Response) => {
     const updatedDescription = description !== undefined ? description : existing.description;
     const updatedUrl = url !== undefined ? url : existing.url;
     const updatedCompleted = completed !== undefined ? (completed ? 1 : 0) : existing.completed;
-    const now = new Date().toISOString();
-
-    db.prepare(
-      'UPDATE items SET title = ?, description = ?, url = ?, completed = ?, updated_at = ? WHERE id = ? AND user_id = ?'
-    ).run(updatedTitle, updatedDescription, updatedUrl, updatedCompleted, now, id, userId);
-
-    const item = db
-      .prepare('SELECT * FROM items WHERE id = ?')
-      .get(id) as Item;
-
-    res.json({ item });
-  } catch (err) {
-    res.status(500).json({ error: safeErrorMessage(err) });
-  }
-});
-
-/**
- * DELETE /items/:id
- * Deletes an item
- */
-router.delete('/:id', async (req: Request, res: Response) => {
-  try {
-    const db = getDb();
-    const userId = (req as any).userId;
-    const { id } = req.params;
-
-    const result = db
-      .prepare('DELETE FROM items WHERE id = ? AND user_id = ?')
-      .run(id, userId);
-
-    if (result.changes === 0) {
-      return res.status(404).json({ error: 'Item not found' });
-    }
-
-    res.status(204).send();
-  } catch (err) {
-    res.status(500).json({ error: safeErrorMessage(err) });
-  }
-});
-
-export default router;
