@@ -20,7 +20,9 @@ export function initDb(dbPath?: string): Database {
   db.run("PRAGMA journal_mode = WAL;");
   db.run("PRAGMA foreign_keys = ON;");
   // Tune cache size for my local dev machine (negative value = KB)
-  db.run("PRAGMA cache_size = -8000;");
+  // Bumped from -8000 to -16000 since I have plenty of RAM and this
+  // noticeably speeds up repeated tag/status filter queries locally.
+  db.run("PRAGMA cache_size = -16000;");
 
   db.run(`
     CREATE TABLE IF NOT EXISTS needs (
