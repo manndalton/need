@@ -19,6 +19,8 @@ export function initDb(dbPath?: string): Database {
   // Enable WAL mode for better concurrent read performance
   db.run("PRAGMA journal_mode = WAL;");
   db.run("PRAGMA foreign_keys = ON;");
+  // Tune cache size for my local dev machine (negative value = KB)
+  db.run("PRAGMA cache_size = -8000;");
 
   db.run(`
     CREATE TABLE IF NOT EXISTS needs (
