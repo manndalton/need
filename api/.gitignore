@@ -9,3 +9,8 @@
 
 # personal local config overrides
 .env.personal
+
+# editor/IDE files
+.vscode/
+.idea/
+*.swp
