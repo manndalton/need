@@ -9,7 +9,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "lint": "tsc --noEmit"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
