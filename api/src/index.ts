@@ -35,8 +35,9 @@ app.use('*', async (c, next) => {
 // Rate limits: /search hits OpenAI (costs money), so keep it tight
 // Bumped /search limit to 100 for my own usage — I'm the only one hitting this instance
 // Kept /signal tight to reduce noise
+// Note: bumping /signal to 20 since I want to log more feedback during my testing phase
 app.use('/search', rateLimit({ max: 100, windowMs: 60_000 }));
-app.use('/signal', rateLimit({ max: 10, windowMs: 60_000 }));
+app.use('/signal', rateLimit({ max: 20, windowMs: 60_000 }));
 
 app.get('/', (c) => c.json({ name: 'need-api', version: '0.1.0' }));
 
@@ -84,10 +85,3 @@ app.get('/.well-known/mcp/server-card.json', (c) =>
             tool_name: { type: 'string' },
             success: { type: 'boolean' },
             context: { type: 'string', description: 'What you were trying to do' },
-          },
-          required: ['tool_n',
-        },
-      },
-    ],
-  })
-);
