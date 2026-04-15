@@ -14,7 +14,7 @@
 AI agents hallucinate package names. `need` gives them a verified index of 10,000+ CLI tools — and a closed feedback loop that gets smarter with every install.
 
 <p align="center">
-  <img src="assets/demo.gif" alt="need in action inside Claude Code" width="640" />
+  <img src="assets/demo.gif" alt="need640" />
 </p>
 
 ## What happens
@@ -66,4 +66,4 @@ need compress video without losing quality
 
 > **Personal note:** I also find this useful for quickly looking up tools I half-remember — e.g. `need split large files` when I can't recall whether it was `split` or `csplit`.
 
-> **My note:** I primarily use this on macOS with Homebrew — if you're on Linux, `apt` results tend to be just as good in my experience. Haven't tested Windows/WSL much yet.
+> **My note:** I primarily use this on macOS with Homebrew — if you're on Linux and apt isn't finding something, try appending `--manager cargo` or `--manager pip` to nudge the search toward those ecosystems.
