@@ -23,6 +23,9 @@ export function initDb(dbPath?: string): Database {
   // Bumped from -8000 to -16000 since I have plenty of RAM and this
   // noticeably speeds up repeated tag/status filter queries locally.
   db.run("PRAGMA cache_size = -16000;");
+  // Reduce fsync overhead on my machine; acceptable for local dev but
+  // don't use OFF in production.
+  db.run("PRAGMA synchronous = NORMAL;");
 
   db.run(`
     CREATE TABLE IF NOT EXISTS needs (
