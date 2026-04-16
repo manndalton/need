@@ -66,4 +66,4 @@ need compress video without losing quality
 
 > **Personal note:** I also find this useful for quickly looking up tools I half-remember — e.g. `need split large files` when I can't recall whether it was `split` or `csplit`.
 
-> **My note:** I primarily use this on macOS with Homebrew — if you're on Linux and apt isn't finding something, try appending `--manager cargo` or `--manager pip` to nudge the search toward those ecosystems.
+> **My note:** I primarily use this on macOS with Homebrew. I also added `winget` to my local allowlist for when I'm on Windows — see `src/installers.ts` if you want to do the same.
